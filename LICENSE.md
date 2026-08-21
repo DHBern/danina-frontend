@@ -1,4 +1,3 @@
-
 Copyright (c) 2026, Sebastian Flick <sebastian.flick@unibe.ch>
 
 Permission to use, copy, modify, and/or distribute this software for any
