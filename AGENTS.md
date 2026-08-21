@@ -4,9 +4,42 @@
 - **Package Manager**: pnpm
 - **Add-ons**: prettier, eslint, playwright, tailwindcss, sveltekit-adapter, ai-tools, experimental
 
+## Project Overview
+
+A static digital scholarly edition of manuscripts, deployed to GitHub Pages via `@sveltejs/adapter-static`. Planned sections:
+
+- **Transcription page** — the most complex view; renders manuscript text (likely with facsimile/text alignment, apparatus, annotations).
+- **Index of people and places** — prosopographical/geographical registry, cross-linked from transcriptions and commentary.
+- **Commentary** — scholarly notes tied to transcription passages.
+
+Since the site is static (no server-side runtime at request time), prefer build-time data loading (`load` functions with `prerender = true`) over runtime API calls, and keep cross-references (e.g. person/place IDs cited in transcriptions) resolvable at build time.
+
+## Conventions
+
+- This project targets the **SvelteKit 3 release candidate** (Svelte 5 required). Config lives in [vite.config.ts](../vite.config.ts), not `svelte.config.js`; [tsconfig.json](../tsconfig.json) extends `$app/tsconfig` rather than `.svelte-kit/tsconfig.json`.
+- Runes mode is forced project-wide (see [vite.config.ts](../vite.config.ts)) except inside `node_modules`.
+- Import app code via the `#lib` subpath import (Node/TS native, maps to `src/lib`), e.g. `import Foo from '#lib/Foo.svelte'`. When importing a plain module (not a `.svelte` file), the path must be unambiguous, e.g. `#lib/foo.ts` or `#lib/foo/index.ts`.
+- `async` and `remoteFunctions` are enabled as `experimental` features in [vite.config.ts](../vite.config.ts) — remote functions are still behind a flag upstream in the SvelteKit 3 RC, so expect API changes before stable release.
+- Global styles/Tailwind/DaisyUI are imported once in [+layout.svelte](../src/routes/+layout.svelte) via [layout.css](../src/routes/layout.css).
+
+## Commands
+
+- `pnpm dev` — dev server. `pnpm build` / `pnpm preview` — production build/preview.
+- `pnpm check` — svelte-check type checking (run after non-trivial edits).
+- `pnpm lint` / `pnpm format` — prettier + eslint check / auto-format.
+- `pnpm test` (alias for `pnpm test:e2e`) — Playwright e2e tests; specs live alongside routes as `*.e2e.ts`.
+
 ---
 
-You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
+You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit 3 release candidate documentation.
+
+You are able to use context7 as an MCP for DaisyUI.
+
+## DaisyUI
+
+DaisyUI is a Tailwind CSS component plugin, enabled via `@plugin 'daisyui';` in [layout.css](../src/routes/layout.css). Use context7 to look up current DaisyUI component classes/APIs before using unfamiliar components — do not guess class names, as they change between major versions.
+
+Here's how to use the available tools effectively:
 
 ## Available Svelte MCP Tools:
 
