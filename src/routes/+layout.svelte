@@ -10,8 +10,8 @@
 
 	let classesActive = $derived((href: string) =>
 		href.split('/')[1] === page.url.pathname.split('/')[1] || href.split('/')[1] === page.url.hash
-			? 'bg-primary-300 hover:bg-primary-300 hover:text-primary-700 text-primary-900'
-			: 'hover:text-primary-600'
+			? 'bg-accent text-accent-content'
+			: ''
 	);
 
 	const menuItems: { label: string; href: '/texte' | '/index' | '/about' }[] = [
@@ -35,15 +35,11 @@
 				tabindex="-1"
 				class="menu dropdown-content z-1 mt-3 w-52 menu-sm rounded-box bg-base-100 p-2 shadow"
 			>
-				<li><a>Item 1</a></li>
-				<li>
-					<a>Parent</a>
-					<ul class="p-2">
-						<li><a>Submenu 1</a></li>
-						<li><a>Submenu 2</a></li>
-					</ul>
-				</li>
-				<li><a>Item 3</a></li>
+				{#each menuItems as item}
+					<li>
+						<a href={resolve(item.href)} class={['', classesActive(item.href)]}>{item.label}</a>
+					</li>
+				{/each}
 			</ul>
 		</div>
 		<a class="btn btn-ghost text-xl" href={resolve('/')}>
