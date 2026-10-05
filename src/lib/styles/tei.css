@@ -1,0 +1,57 @@
+/* Styles for CETEIcean output (tei-* custom elements), scoped to .tei containers. */
+
+.tei :is(tei-text, tei-body, tei-div, tei-p, tei-head, tei-ab, tei-quote, tei-fw, tei-lg, tei-l) {
+	display: block;
+}
+
+.tei tei-head {
+	font-weight: 600;
+	margin-block-end: 0.75em;
+}
+
+.tei :is(tei-p, tei-ab) {
+	margin-block-end: 1em;
+}
+
+.tei tei-ab[type='motto_epigraph'] {
+	font-style: italic;
+	margin-inline-start: 35%;
+}
+
+.tei tei-quote {
+	margin-block: 0.5em;
+	margin-inline-start: 1.5em;
+}
+
+/* Keep manuscript line breaks in the transcription only. */
+.tei[lang='ru'] tei-milestone[unit='line'] {
+	display: block;
+}
+
+.tei tei-fw {
+	font-family: var(--font-sans);
+	font-size: 0.75em;
+	text-align: end;
+	opacity: 0.6;
+}
+
+.tei tei-pb {
+	display: block;
+	margin-block: 0.75em;
+	border-top: 1px dashed var(--color-base-300);
+	font-family: var(--font-sans);
+	font-size: 0.75rem;
+	color: var(--color-neutral);
+}
+
+.tei tei-pb::after {
+	content: attr(n);
+}
+
+.tei tei-del {
+	text-decoration: line-through;
+}
+
+.tei :is(tei-persname, tei-placename) {
+	color: var(--color-primary);
+}
