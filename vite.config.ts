@@ -14,6 +14,11 @@ export default defineConfig({
 				experimental: { async: true }
 			},
 			adapter: adapter(),
+			prerender: {
+				// '/index' can be treated specially by crawlers due to index URL normalization,
+				// so include it explicitly as an entry to guarantee generation.
+				entries: ['*', '/index', '/index/']
+			},
 			experimental: { remoteFunctions: true }
 		})
 	]

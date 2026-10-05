@@ -8,11 +8,10 @@
 
 	let { children } = $props();
 
-	let classesActive = $derived((href: string) =>
+	const classesActive = (href: string) =>
 		href.split('/')[1] === page.url.pathname.split('/')[1] || href.split('/')[1] === page.url.hash
 			? 'bg-accent text-accent-content'
-			: ''
-	);
+			: '';
 
 	const menuItems: { label: string; href: '/texte' | '/index' | '/about' }[] = [
 		{ label: 'Texte', href: '/texte' },
@@ -35,9 +34,14 @@
 				tabindex="-1"
 				class="menu dropdown-content z-1 mt-3 w-52 menu-sm rounded-box bg-base-100 p-2 shadow"
 			>
-				{#each menuItems as item}
+				{#each menuItems as item (item.href)}
 					<li>
-						<a href={resolve(item.href)} class={['', classesActive(item.href)]}>{item.label}</a>
+						<a
+							href={item.href === '/index' ? resolve('index/') : resolve(item.href)}
+							class={['', classesActive(item.href)]}
+						>
+							{item.label}
+						</a>
 					</li>
 				{/each}
 			</ul>
@@ -50,9 +54,14 @@
 			<span class="self-baseline italic">Danina</span>
 		</a>
 		<ul class="menu menu-horizontal px-1">
-			{#each menuItems as item}
+			{#each menuItems as item (item.href)}
 				<li>
-					<a href={resolve(item.href)} class={['', classesActive(item.href)]}>{item.label}</a>
+					<a
+						href={item.href === '/index' ? resolve('index/') : resolve(item.href)}
+						class={['', classesActive(item.href)]}
+					>
+						{item.label}
+					</a>
 				</li>
 			{/each}
 		</ul>
