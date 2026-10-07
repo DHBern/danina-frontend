@@ -19,7 +19,12 @@ export default defineConfig({
 				// so include it explicitly as an entry to guarantee generation.
 				entries: ['*', '/index', '/index/']
 			},
-			experimental: { remoteFunctions: true }
+			experimental: { remoteFunctions: true },
+			inspector: {
+				toggleKeyCombo: 'alt-y',
+				showToggleButton: 'always',
+				toggleButtonPos: 'bottom-right'
+			}
 		})
 	]
 });
