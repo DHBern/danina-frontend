@@ -19,6 +19,7 @@
 	let activeSlug = $derived(initial.slug);
 	let ruEl = $state<HTMLElement>();
 	let deEl = $state<HTMLElement>();
+	let drawerOpen = $state(true);
 
 	let loadingPrev = false;
 	let loadingNext = false;
@@ -95,25 +96,33 @@
 	}
 </script>
 
-<div
-	class="grid h-[calc(100dvh-4rem)] grid-rows-[auto_minmax(0,1fr)_minmax(0,1fr)] gap-4 p-4 lg:grid-cols-[345px_minmax(0,1fr)_minmax(0,1fr)] lg:grid-rows-1 lg:gap-6"
->
-	<NavPanel toc={index.toc} {activeSlug} onselect={select} class="max-lg:max-h-[40dvh]" />
-	<TextPane
-		title="Transkription"
-		lang="ru"
-		{chapters}
-		bind:scrollEl={ruEl}
-		textClass="mb-12 text-[18px] leading-[22px]"
-		{onscroll}
-		onreachstart={loadPrev}
-		onreachend={loadNext}
+<div class="drawer h-[calc(100dvh-4rem)] grid-rows-[minmax(0,1fr)] lg:drawer-open">
+	<input
+		id="text-navigation-drawer"
+		type="checkbox"
+		class="drawer-toggle"
+		bind:checked={drawerOpen}
 	/>
-	<TextPane
-		title="Übersetzung"
-		lang="de"
-		{chapters}
-		bind:scrollEl={deEl}
-		textClass="mb-12 text-xl"
-	/>
+	<div
+		class="drawer-content grid h-full min-h-0 min-w-0 grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-4 p-4 lg:grid-cols-2 lg:grid-rows-1 lg:gap-6"
+	>
+		<TextPane
+			title="Transkription"
+			lang="ru"
+			{chapters}
+			bind:scrollEl={ruEl}
+			textClass="mb-12 text-[18px] leading-[22px]"
+			{onscroll}
+			onreachstart={loadPrev}
+			onreachend={loadNext}
+		/>
+		<TextPane
+			title="Übersetzung"
+			lang="de"
+			{chapters}
+			bind:scrollEl={deEl}
+			textClass="mb-12 text-xl"
+		/>
+	</div>
+	<NavPanel toc={index.toc} {activeSlug} onselect={select} drawerId="text-navigation-drawer" />
 </div>

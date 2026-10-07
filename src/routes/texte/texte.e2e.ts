@@ -12,6 +12,35 @@ test.describe('reader', () => {
 		await page.goto('/texte/div-13_006/');
 	});
 
+	for (const viewport of [
+		{ width: 1440, height: 1024 },
+		{ width: 390, height: 844 }
+	]) {
+		test(`keeps initial content lazy at ${viewport.width}px`, async ({ page }) => {
+			await page.setViewportSize(viewport);
+			await page.reload();
+			const ru = page.getByRole('region', { name: 'Transkription' });
+			await expect(ru.locator('[data-slug="div-13_005"]')).toBeAttached();
+			for (const name of ['Transkription', 'Übersetzung']) {
+				const pane = page.getByRole('region', { name });
+				const bounds = await pane.evaluate((el) => ({
+					top: el.getBoundingClientRect().top,
+					bottom: el.getBoundingClientRect().bottom,
+					height: el.clientHeight,
+					scrollHeight: el.scrollHeight,
+					readerTop: el.closest('.drawer')!.getBoundingClientRect().top,
+					readerBottom: el.closest('.drawer')!.getBoundingClientRect().bottom
+				}));
+				expect(bounds.top).toBeGreaterThanOrEqual(bounds.readerTop);
+				expect(bounds.bottom).toBeLessThanOrEqual(bounds.readerBottom);
+				expect(bounds.height).toBeGreaterThan(0);
+				expect(bounds.scrollHeight).toBeGreaterThan(bounds.height);
+				expect(await pane.locator('[data-slug]').count()).toBeLessThanOrEqual(3);
+				await expect(pane.locator('[data-slug="div-13_007"]')).not.toBeAttached();
+			}
+		});
+	}
+
 	test('shows navigation, transcription and translation panes', async ({ page }) => {
 		await expect(page.getByRole('heading', { name: 'Navigation' })).toBeVisible();
 		const ru = page.getByRole('region', { name: 'Transkription' });
